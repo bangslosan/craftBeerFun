@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ti:app xmlns:ti="http://ti.appcelerator.org">
+    <property name="acs-oauth-secret-production" type="string">ry9nIdIPRhTr34udlRXzkP3TKJG38rsr</property>
+    <property name="acs-oauth-key-production" type="string">BXtyjg9ctSyIPWWthnCyXhCj7jTid0fN</property>
+    <property name="acs-api-key-production" type="string">USYuePmaHFpCa6OximvLbHVuiK7B9Vnq</property>
+    <property name="acs-oauth-secret-development" type="string">pZuCl0rz79ErfxGFRQG68Um8bF5pzkLs</property>
+    <property name="acs-oauth-key-development" type="string">LM4jLHCzKBKWJNnli3w5bDyTXtl9rTvl</property>
+    <property name="acs-api-key-development" type="string">ZkStc9snFNjR8rzD4UJTtjceyXTyKOLe</property>
+    <deployment-targets>
+        <target device="mobileweb">false</target>
+        <target device="iphone">true</target>
+        <target device="ipad">false</target>
+        <target device="android">true</target>
+        <target device="blackberry">false</target>
+    </deployment-targets>
+    <sdk-version>3.0.0.GA</sdk-version>
+    <id>info.h5y1m141.craftBeerFun</id>
+    <name>craftBeerFun</name>
+    <version>1.0</version>
+    <publisher>hoyamada</publisher>
+    <url>http://</url>
+    <description>not specified</description>
+    <copyright>2013 by hoyamada</copyright>
+    <icon>appicon.png</icon>
+    <persistent-wifi>false</persistent-wifi>
+    <prerendered-icon>false</prerendered-icon>
+    <statusbar-style>default</statusbar-style>
+    <statusbar-hidden>false</statusbar-hidden>
+    <fullscreen>false</fullscreen>
+    <navbar-hidden>false</navbar-hidden>
+    <analytics>true</analytics>
+    <guid>fbe445f4-c56c-4e51-a2de-41d64655ebc5</guid>
+    <property name="ti.ui.defaultunit">system</property>
+    <iphone>
+        <orientations device="iphone">
+            <orientation>Ti.UI.PORTRAIT</orientation>
+        </orientations>
+        <orientations device="ipad">
+            <orientation>Ti.UI.PORTRAIT</orientation>
+            <orientation>Ti.UI.UPSIDE_PORTRAIT</orientation>
+            <orientation>Ti.UI.LANDSCAPE_LEFT</orientation>
+            <orientation>Ti.UI.LANDSCAPE_RIGHT</orientation>
+        </orientations>
+    </iphone>
+    <android xmlns:android="http://schemas.android.com/apk/res/android"/>
+    <mobileweb>
+        <precache/>
+        <splash>
+            <enabled>true</enabled>
+            <inline-css-images>true</inline-css-images>
+        </splash>
+        <theme>default</theme>
+    </mobileweb>
+    <modules>
+        <module platform="commonjs" version="2.3.0">ti.cloud</module>
+	<module platform="iphone" version="1.2">dk.napp.slidemenu</module>
+    </modules>
+</ti:app>

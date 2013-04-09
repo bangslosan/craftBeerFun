@@ -1,0 +1,8 @@
+build
+build.log
+tmp
+._*
+.DS_Store
+Resources/KS_nav_ui.png
+Resources/KS_nav_views.png
+Resources/config/*

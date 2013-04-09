@@ -1,0 +1,13 @@
+#pictImage {
+    /* background-color: linear-gradient(#292e31, #3a3f42); */
+    box-shadow: inset 0 2px 2px rgba(255,255,255,0.3);
+
+}
+
+#container {
+    border-width:1px;
+    border-color: #ccc;
+    background-color: linear-gradient(#fff, #eee);
+    /* box-shadow      :0 2px 2px rgba(0,0,0,0.5) */
+
+}
