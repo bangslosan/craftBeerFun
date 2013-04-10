@@ -13,7 +13,7 @@
         <target device="android">true</target>
         <target device="blackberry">false</target>
     </deployment-targets>
-    <sdk-version>3.0.0.GA</sdk-version>
+    <sdk-version>3.0.2.GA</sdk-version>
     <id>info.h5y1m141.craftBeerFun</id>
     <name>craftBeerFun</name>
     <version>1.0</version>
@@ -53,6 +53,6 @@
     </mobileweb>
     <modules>
         <module platform="commonjs" version="2.3.0">ti.cloud</module>
-	<module platform="iphone" version="1.2">dk.napp.slidemenu</module>
+        <module platform="iphone" version="1.2">dk.napp.slidemenu</module>
     </modules>
 </ti:app>
