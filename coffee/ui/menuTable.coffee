@@ -53,7 +53,8 @@ class menuTable
     allLabelRow.selectedBackgroundColor = @backgroundColorSub
 
     allLabelRow.addEventListener('click',(e) =>
-      mainWindow.close()      
+      
+
     )
     
     allStockBtn = Ti.UI.createImageView

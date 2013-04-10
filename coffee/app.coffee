@@ -32,47 +32,54 @@ else
   mainWindow = Ti.UI.createWindow
     title: "クラフトビール東京"
     barColor:"#DD9F00"
-    backgroundColor: "#343434"
+    backgroundColor: "#fff"
 
 
   webWindow = Ti.UI.createWindow
     title: ""
     barColor:"#DD9F00"
+    backgroundColor: "#fff"
+    
+  mapWindow = Ti.UI.createWindow
+    title: "お店の情報"
+    barColor:"#DD9F00"
     backgroundColor: "#343434"
+
+  mapTitle = Ti.UI.createLabel
+    text:'map'
+    left:5
+    top:5
+    font:
+      fontSize:16
+      fontWeight:'bold'
+
+
+  mapWindow.add mapTitle
+
     
   webViewHeader = webview.retreiveWebViewHeader()
   webViewContents = webview.retreiveWebView()
   webWindow.add webViewHeader
   webWindow.add webViewContents
 
-  createCenterNavWindow = ->
-    leftBtn = Ti.UI.createButton(title: "Menu")
-    leftBtn.addEventListener "click", ->
-      rootWindow.toggleLeftView()
-      rootWindow.setCenterhiddenInteractivity "TouchDisabledWithTapToCloseBouncing"
-      rootWindow.setPanningMode "NavigationBarPanning"
-
-    mainWindow.leftNavButton = leftBtn
-    mainWindow.add mainTable
-
-    navController = Ti.UI.iPhone.createNavigationGroup(window: mainWindow)
-    return navController
+  tabGroup = Ti.UI.createTabGroup
+    tabsBackgroundColor:"#DD9F00"
     
+  tab1 = Ti.UI.createTab
+    window:mainWindow
+    title:'最新ニュース'
+    
+  mainWindow.hideNavBar()
+  mapWindow.hideNavBar()
   
-  winLeft = Ti.UI.createWindow(backgroundColor: "white")
-  winLeft.add menu
-  navController = createCenterNavWindow()
+  tab2 = Ti.UI.createTab
+    window:mapWindow
+    title:'探す'
+    
+  tabGroup.addTab tab1
+  tabGroup.addTab tab2
+  tabGroup.open()
   
-
-  # NappSlideMenu WINDOW
-  NappSlideMenu = require("dk.napp.slidemenu")
-  rootWindow = NappSlideMenu.createSlideMenuWindow(
-    centerWindow: navController
-    leftWindow: winLeft
-    leftLedge:200
-  )
-
-  rootWindow.open()    
   results = []
   craftBeerTokyo.getFeedFromLocal((entries)->
     for entry in entries
@@ -93,7 +100,6 @@ else
     # http://d.hatena.ne.jp/yatemmma/20110723/1311534794を参考に実装
     # なお比較した結果、1を最初に返すと更新日古い順番にソートされる
     results.sort( (a, b) ->
-      Ti.API.info "TITLE:#{a.title} Date: #{moment(a.publishedDate).format('YYYYMMDDHHmm')}"
 
       (if moment(a.publishedDate).format("YYYYMMDDHHmm") > moment(b.publishedDate).format("YYYYMMDDHHmm") then -1 else 1)
     )
@@ -103,7 +109,7 @@ else
       tableData.push tableView.createRow(result)
     
     mainTable.setData tableData
-    
-    mainWindow.open()
+    mainWindow.add mainTable
+
   )
   

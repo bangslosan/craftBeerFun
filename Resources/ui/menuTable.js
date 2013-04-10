@@ -56,9 +56,7 @@ menuTable = (function() {
     allLabelRow = Ti.UI.createTableViewRow(this.rowColorTheme);
     allLabelRow.backgroundColor = this.qiitaColor;
     allLabelRow.selectedBackgroundColor = this.backgroundColorSub;
-    allLabelRow.addEventListener('click', function(e) {
-      return mainWindow.close();
-    });
+    allLabelRow.addEventListener('click', function(e) {});
     allStockBtn = Ti.UI.createImageView({
       image: "ui/image/light_list.png",
       left: 5,
