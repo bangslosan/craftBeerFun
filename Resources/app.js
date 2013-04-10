@@ -1,4 +1,4 @@
-var Coedo, CraftBeerTokyo, Facebook, NappSlideMenu, SanktGallen, coedo, craftBeerTokyo, createCenterNavWindow, facebook, mainTable, mainWindow, maintable, moment, momentja, navController, results, rootWindow, sanktGallen, tableView, testsEnabled, webView, webViewContents, webViewHeader, webWindow, webview, winLeft;
+var Coedo, CraftBeerTokyo, Facebook, MenuTable, NappSlideMenu, SanktGallen, coedo, craftBeerTokyo, createCenterNavWindow, facebook, mainTable, mainWindow, maintable, menu, menuTable, moment, momentja, navController, results, rootWindow, sanktGallen, tableView, testsEnabled, webView, webViewContents, webViewHeader, webWindow, webview, winLeft;
 
 moment = require('lib/moment.min');
 
@@ -14,6 +14,9 @@ if (testsEnabled === false) {
   maintable = require("ui/maintable");
   tableView = new maintable();
   mainTable = tableView.getTable();
+  MenuTable = require('ui/menuTable');
+  menuTable = new MenuTable();
+  menu = menuTable.getMenu();
   webView = require("ui/webView");
   webview = new webView();
   CraftBeerTokyo = require("model/craftBeerTokyo");
@@ -56,6 +59,7 @@ if (testsEnabled === false) {
   winLeft = Ti.UI.createWindow({
     backgroundColor: "white"
   });
+  winLeft.add(menu);
   navController = createCenterNavWindow();
   NappSlideMenu = require("dk.napp.slidemenu");
   rootWindow = NappSlideMenu.createSlideMenuWindow({

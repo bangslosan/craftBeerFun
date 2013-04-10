@@ -13,6 +13,10 @@ else
   maintable = require("ui/maintable")
   tableView = new maintable()
   mainTable = tableView.getTable()
+
+  MenuTable = require('ui/menuTable')
+  menuTable = new MenuTable()
+  menu = menuTable.getMenu()
   
   webView = require("ui/webView")
   webview = new webView()
@@ -56,6 +60,7 @@ else
     
   
   winLeft = Ti.UI.createWindow(backgroundColor: "white")
+  winLeft.add menu
   navController = createCenterNavWindow()
   
 
