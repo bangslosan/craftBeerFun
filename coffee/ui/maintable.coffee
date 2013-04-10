@@ -148,22 +148,28 @@ class mainTable
       left:0
       top:0
 
-    cropView = Titanium.UI.createView
-      width:200
-      height:200
-      top:0
-      left:0
+    # cropView = Titanium.UI.createView
+    #   width:200
+    #   height:200
+    #   top:0
+    #   left:0
       
-    cropView.add pictImage
+    # cropView.add pictImage
 
-    pictImage.left = -100
-    pictImage.top = -100
-    croppedImage = cropView.toImage()
+    # pictImage.left = -100
+    # pictImage.top = -100
+    # croppedImage = cropView.toImage()
+    #
+    blob = pictImage.toBlob()
+    blob.imageAsCropped({
+      height:200
+      width:200
+      x:-100
+      y:-100
+    })
 
     imageView = Titanium.UI.createImageView
-      image:croppedImage
-      width: 200
-      height:200
+      image:blob
       top:2
       left:5
 
@@ -201,6 +207,7 @@ class mainTable
     #     y:50
     # )
     pictImageContainer.add imageView
+
     
 
 
@@ -305,9 +312,19 @@ class mainTable
     container.add pictImageContainer
     container.add textLabel
     container.add updateTime
+    
     messageBoxContainer.add bodySummary
+    mainImage = container.toImage()
+    imagedContainer = Ti.UI.createImageView
+      image:mainImage
+      width:220
+      height:250
+      left:50
+      top:5
 
-    row.add container
+    # row.add container
+    Ti.API.info imagedContainer
+    row.add imagedContainer
     row.add triangleImage
     row.add breakLine
     row.add messageBoxContainer

@@ -97,7 +97,7 @@ mainTable = (function() {
   };
 
   mainTable.prototype.createRow = function(entry) {
-    var bodySummary, breakLine, container, cropView, croppedImage, imagePath, imageView, messageBoxContainer, pictImage, pictImageContainer, pubDate, row, textLabel, triangleImage, updateTime;
+    var blob, bodySummary, breakLine, container, imagePath, imageView, imagedContainer, mainImage, messageBoxContainer, pictImage, pictImageContainer, pubDate, row, textLabel, triangleImage, updateTime;
     row = Ti.UI.createTableViewRow({
       backgroundGradient: {
         type: 'linear',
@@ -147,20 +147,15 @@ mainTable = (function() {
       left: 0,
       top: 0
     });
-    cropView = Titanium.UI.createView({
-      width: 200,
+    blob = pictImage.toBlob();
+    blob.imageAsCropped({
       height: 200,
-      top: 0,
-      left: 0
+      width: 200,
+      x: -100,
+      y: -100
     });
-    cropView.add(pictImage);
-    pictImage.left = -100;
-    pictImage.top = -100;
-    croppedImage = cropView.toImage();
     imageView = Titanium.UI.createImageView({
-      image: croppedImage,
-      width: 200,
-      height: 200,
+      image: blob,
       top: 2,
       left: 5
     });
@@ -307,7 +302,16 @@ mainTable = (function() {
     container.add(textLabel);
     container.add(updateTime);
     messageBoxContainer.add(bodySummary);
-    row.add(container);
+    mainImage = container.toImage();
+    imagedContainer = Ti.UI.createImageView({
+      image: mainImage,
+      width: 220,
+      height: 250,
+      left: 50,
+      top: 5
+    });
+    Ti.API.info(imagedContainer);
+    row.add(imagedContainer);
     row.add(triangleImage);
     row.add(breakLine);
     row.add(messageBoxContainer);
