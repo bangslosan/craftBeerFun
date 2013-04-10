@@ -310,7 +310,6 @@ mainTable = (function() {
       left: 50,
       top: 5
     });
-    Ti.API.info(imagedContainer);
     row.add(imagedContainer);
     row.add(triangleImage);
     row.add(breakLine);

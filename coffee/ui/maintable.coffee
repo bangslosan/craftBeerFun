@@ -300,8 +300,7 @@ class mainTable
       left:50
       top:5
 
-    # row.add container
-    Ti.API.info imagedContainer
+
     row.add imagedContainer
     row.add triangleImage
     row.add breakLine
