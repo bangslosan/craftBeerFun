@@ -148,25 +148,13 @@ class mainTable
       left:0
       top:0
 
-    # cropView = Titanium.UI.createView
-    #   width:200
-    #   height:200
-    #   top:0
-    #   left:0
-      
-    # cropView.add pictImage
-
-    # pictImage.left = -100
-    # pictImage.top = -100
-    # croppedImage = cropView.toImage()
-    #
     blob = pictImage.toBlob()
-    blob.imageAsCropped({
+    blob.imageAsCropped
       height:200
       width:200
       x:-100
       y:-100
-    })
+
 
     imageView = Titanium.UI.createImageView
       image:blob
@@ -197,18 +185,8 @@ class mainTable
           position: 1.0
         ]
 
-    
-    # pictImage.addEventListener('load',(e) ->
-    #   blob = e.source.toBlob()
-    #   blob.imageAsCropped
-    #     width:100
-    #     height:100
-    #     x:10
-    #     y:50
-    # )
     pictImageContainer.add imageView
 
-    
 
 
     textLabel = Ti.UI.createLabel
