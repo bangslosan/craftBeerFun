@@ -1,8 +1,10 @@
-var Coedo, CraftBeerTokyo, Facebook, NappSlideMenu, SanktGallen, coedo, craftBeerTokyo, createCenterNavWindow, facebook, mainTable, mainWindow, maintable, moment, momentja, navController, results, rootWindow, sanktGallen, tableView, testsEnabled, webView, webViewContents, webViewHeader, webWindow, webview, winLeft;
+var Cloud, Coedo, CraftBeerTokyo, Facebook, MenuTable, SanktGallen, coedo, craftBeerTokyo, facebook, mainTable, mainWindow, maintable, mapView, mapWindow, menu, menuTable, moment, momentja, results, sanktGallen, tab1, tab2, tabGroup, tableView, testsEnabled, webView, webViewContents, webViewHeader, webWindow, webview;
 
 moment = require('lib/moment.min');
 
 momentja = require('lib/momentja');
+
+Cloud = require('ti.cloud');
 
 testsEnabled = true;
 
@@ -14,6 +16,9 @@ if (testsEnabled === false) {
   maintable = require("ui/maintable");
   tableView = new maintable();
   mainTable = tableView.getTable();
+  MenuTable = require('ui/menuTable');
+  menuTable = new MenuTable();
+  menu = menuTable.getMenu();
   webView = require("ui/webView");
   webview = new webView();
   CraftBeerTokyo = require("model/craftBeerTokyo");
@@ -25,45 +30,89 @@ if (testsEnabled === false) {
   mainWindow = Ti.UI.createWindow({
     title: "クラフトビール東京",
     barColor: "#DD9F00",
-    backgroundColor: "#343434"
+    backgroundColor: "#fff"
   });
   webWindow = Ti.UI.createWindow({
     title: "",
     barColor: "#DD9F00",
+    backgroundColor: "#fff"
+  });
+  mapWindow = Ti.UI.createWindow({
+    title: "お店の情報",
+    barColor: "#DD9F00",
     backgroundColor: "#343434"
   });
+  mapView = Titanium.Map.createView({
+    mapType: Titanium.Map.STANDARD_TYPE,
+    region: {
+      latitude: 35.676564,
+      longitude: 139.765076,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01
+    },
+    animate: true,
+    regionFit: true,
+    userLocation: true
+  });
+  mapView.addEventListener('regionChanged', function(e) {
+    Ti.API.info("" + e.latitude + " and " + e.longitude);
+    return Cloud.Places.query({
+      page: 1,
+      per_page: 20,
+      where: {
+        lnglat: {
+          $nearSphere: [e.longitude, e.latitude],
+          $maxDistance: 0.00126
+        }
+      }
+    }, function(e) {
+      var atlanta, i, _results;
+      if (e.success) {
+        i = 0;
+        _results = [];
+        while (i < e.places.length) {
+          atlanta = Titanium.Map.createAnnotation({
+            latitude: e.places[i].latitude,
+            longitude: e.places[i].longitude,
+            title: e.places[i].name,
+            subtitle: "",
+            pincolor: Titanium.Map.ANNOTATION_PURPLE,
+            animate: false,
+            leftButton: "images/atlanta.jpg",
+            rightButton: Titanium.UI.iPhone.SystemButton.DISCLOSURE
+          });
+          mapView.addAnnotation(atlanta);
+          _results.push(i++);
+        }
+        return _results;
+      } else {
+        return Ti.API.info("no data");
+      }
+    });
+  });
+  mapWindow.add(mapView);
   webViewHeader = webview.retreiveWebViewHeader();
   webViewContents = webview.retreiveWebView();
   webWindow.add(webViewHeader);
   webWindow.add(webViewContents);
-  createCenterNavWindow = function() {
-    var leftBtn, navController;
-    leftBtn = Ti.UI.createButton({
-      title: "Menu"
-    });
-    leftBtn.addEventListener("click", function() {
-      rootWindow.toggleLeftView();
-      rootWindow.setCenterhiddenInteractivity("TouchDisabledWithTapToCloseBouncing");
-      return rootWindow.setPanningMode("NavigationBarPanning");
-    });
-    mainWindow.leftNavButton = leftBtn;
-    mainWindow.add(mainTable);
-    navController = Ti.UI.iPhone.createNavigationGroup({
-      window: mainWindow
-    });
-    return navController;
-  };
-  winLeft = Ti.UI.createWindow({
-    backgroundColor: "white"
+  tabGroup = Ti.UI.createTabGroup({
+    tabsBackgroundColor: "#DD9F00"
   });
-  navController = createCenterNavWindow();
-  NappSlideMenu = require("dk.napp.slidemenu");
-  rootWindow = NappSlideMenu.createSlideMenuWindow({
-    centerWindow: navController,
-    leftWindow: winLeft,
-    leftLedge: 200
+  tab1 = Ti.UI.createTab({
+    window: mainWindow,
+    title: '最新ニュース',
+    icon: "ui/image/light_doc@2x.png"
   });
-  rootWindow.open();
+  mainWindow.hideNavBar();
+  mapWindow.hideNavBar();
+  tab2 = Ti.UI.createTab({
+    window: mapWindow,
+    title: '探す',
+    icon: "ui/image/light_locate@2x.png"
+  });
+  tabGroup.addTab(tab1);
+  tabGroup.addTab(tab2);
+  tabGroup.open();
   results = [];
   craftBeerTokyo.getFeedFromLocal(function(entries) {
     var entry, result, tableData, _i, _j, _len, _len1;
@@ -90,7 +139,6 @@ if (testsEnabled === false) {
       return _results;
     });
     results.sort(function(a, b) {
-      Ti.API.info("TITLE:" + a.title + " Date: " + (moment(a.publishedDate).format('YYYYMMDDHHmm')));
       if (moment(a.publishedDate).format("YYYYMMDDHHmm") > moment(b.publishedDate).format("YYYYMMDDHHmm")) {
         return -1;
       } else {
@@ -103,6 +151,6 @@ if (testsEnabled === false) {
       tableData.push(tableView.createRow(result));
     }
     mainTable.setData(tableData);
-    return mainWindow.open();
+    return mainWindow.add(mainTable);
   });
 }

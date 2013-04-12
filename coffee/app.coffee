@@ -1,7 +1,7 @@
 # 外部のライブラリ読み込み 
 moment = require('lib/moment.min')
 momentja = require('lib/momentja')
-
+Cloud = require('ti.cloud')
 testsEnabled = true
 
 if testsEnabled is false
@@ -13,6 +13,10 @@ else
   maintable = require("ui/maintable")
   tableView = new maintable()
   mainTable = tableView.getTable()
+
+  MenuTable = require('ui/menuTable')
+  menuTable = new MenuTable()
+  menu = menuTable.getMenu()
   
   webView = require("ui/webView")
   webview = new webView()
@@ -28,46 +32,97 @@ else
   mainWindow = Ti.UI.createWindow
     title: "クラフトビール東京"
     barColor:"#DD9F00"
-    backgroundColor: "#343434"
+    backgroundColor: "#fff"
 
 
   webWindow = Ti.UI.createWindow
     title: ""
     barColor:"#DD9F00"
+    backgroundColor: "#fff"
+    
+  mapWindow = Ti.UI.createWindow
+    title: "お店の情報"
+    barColor:"#DD9F00"
     backgroundColor: "#343434"
+  # MapView = require("ui/mapView")
+  # mapView = new MapView()
+  # マーカーはAnnotationオブジェクトとして表現される。
+
+  mapView = Titanium.Map.createView
+    mapType: Titanium.Map.STANDARD_TYPE
+    region: 
+      latitude:35.676564
+      longitude:139.765076
+      # 1.0から0.001の間で縮尺尺度を示している。
+      # 数値が大きい方が広域な地図になる。donayamaさんの書籍P.179の解説がわかりやすい
+      latitudeDelta:0.01
+      longitudeDelta:0.01
+    animate:true
+    regionFit:true
+    userLocation:true
+    
+  mapView.addEventListener('regionChanged',(e)->
+    Ti.API.info "#{ e.latitude} and #{e.longitude}"
+    Cloud.Places.query
+      page: 1
+      per_page: 20
+      where:
+        lnglat:
+          $nearSphere: [e.longitude, e.latitude] # [longitude latitude]
+          $maxDistance: 0.00126
+    , (e) ->
+      if e.success
+        i = 0
+        while i < e.places.length
+            
+          atlanta = Titanium.Map.createAnnotation(
+            latitude: e.places[i].latitude
+            longitude: e.places[i].longitude
+            title: e.places[i].name
+            subtitle: ""
+            pincolor: Titanium.Map.ANNOTATION_PURPLE
+            animate: false
+            leftButton: "images/atlanta.jpg"
+            rightButton: Titanium.UI.iPhone.SystemButton.DISCLOSURE
+          )
+          mapView.addAnnotation atlanta
+          
+          i++          
+          
+      else
+        Ti.API.info "no data"
+    
+
+  )
+
+  mapWindow.add mapView
+
     
   webViewHeader = webview.retreiveWebViewHeader()
   webViewContents = webview.retreiveWebView()
   webWindow.add webViewHeader
   webWindow.add webViewContents
 
-  createCenterNavWindow = ->
-    leftBtn = Ti.UI.createButton(title: "Menu")
-    leftBtn.addEventListener "click", ->
-      rootWindow.toggleLeftView()
-      rootWindow.setCenterhiddenInteractivity "TouchDisabledWithTapToCloseBouncing"
-      rootWindow.setPanningMode "NavigationBarPanning"
-
-    mainWindow.leftNavButton = leftBtn
-    mainWindow.add mainTable
-
-    navController = Ti.UI.iPhone.createNavigationGroup(window: mainWindow)
-    return navController
+  tabGroup = Ti.UI.createTabGroup
+    tabsBackgroundColor:"#DD9F00"
     
+  tab1 = Ti.UI.createTab
+    window:mainWindow
+    title:'最新ニュース'
+    icon:"ui/image/light_doc@2x.png"
+    
+  mainWindow.hideNavBar()
+  mapWindow.hideNavBar()
   
-  winLeft = Ti.UI.createWindow(backgroundColor: "white")
-  navController = createCenterNavWindow()
+  tab2 = Ti.UI.createTab
+    window:mapWindow
+    title:'探す'
+    icon:"ui/image/light_locate@2x.png"
+    
+  tabGroup.addTab tab1
+  tabGroup.addTab tab2
+  tabGroup.open()
   
-
-  # NappSlideMenu WINDOW
-  NappSlideMenu = require("dk.napp.slidemenu")
-  rootWindow = NappSlideMenu.createSlideMenuWindow(
-    centerWindow: navController
-    leftWindow: winLeft
-    leftLedge:200
-  )
-
-  rootWindow.open()    
   results = []
   craftBeerTokyo.getFeedFromLocal((entries)->
     for entry in entries
@@ -88,7 +143,6 @@ else
     # http://d.hatena.ne.jp/yatemmma/20110723/1311534794を参考に実装
     # なお比較した結果、1を最初に返すと更新日古い順番にソートされる
     results.sort( (a, b) ->
-      Ti.API.info "TITLE:#{a.title} Date: #{moment(a.publishedDate).format('YYYYMMDDHHmm')}"
 
       (if moment(a.publishedDate).format("YYYYMMDDHHmm") > moment(b.publishedDate).format("YYYYMMDDHHmm") then -1 else 1)
     )
@@ -98,7 +152,7 @@ else
       tableData.push tableView.createRow(result)
     
     mainTable.setData tableData
-    
-    mainWindow.open()
+    mainWindow.add mainTable
+
   )
   
