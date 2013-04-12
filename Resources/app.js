@@ -1,8 +1,10 @@
-var Coedo, CraftBeerTokyo, Facebook, MenuTable, SanktGallen, coedo, craftBeerTokyo, facebook, mainTable, mainWindow, maintable, mapTitle, mapWindow, menu, menuTable, moment, momentja, results, sanktGallen, tab1, tab2, tabGroup, tableView, testsEnabled, webView, webViewContents, webViewHeader, webWindow, webview;
+var Cloud, Coedo, CraftBeerTokyo, Facebook, MenuTable, SanktGallen, coedo, craftBeerTokyo, facebook, mainTable, mainWindow, maintable, mapView, mapWindow, menu, menuTable, moment, momentja, results, sanktGallen, tab1, tab2, tabGroup, tableView, testsEnabled, webView, webViewContents, webViewHeader, webWindow, webview;
 
 moment = require('lib/moment.min');
 
 momentja = require('lib/momentja');
+
+Cloud = require('ti.cloud');
 
 testsEnabled = true;
 
@@ -40,16 +42,55 @@ if (testsEnabled === false) {
     barColor: "#DD9F00",
     backgroundColor: "#343434"
   });
-  mapTitle = Ti.UI.createLabel({
-    text: 'map',
-    left: 5,
-    top: 5,
-    font: {
-      fontSize: 16,
-      fontWeight: 'bold'
-    }
+  mapView = Titanium.Map.createView({
+    mapType: Titanium.Map.STANDARD_TYPE,
+    region: {
+      latitude: 35.676564,
+      longitude: 139.765076,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01
+    },
+    animate: true,
+    regionFit: true,
+    userLocation: true
   });
-  mapWindow.add(mapTitle);
+  mapView.addEventListener('regionChanged', function(e) {
+    Ti.API.info("" + e.latitude + " and " + e.longitude);
+    return Cloud.Places.query({
+      page: 1,
+      per_page: 20,
+      where: {
+        lnglat: {
+          $nearSphere: [e.longitude, e.latitude],
+          $maxDistance: 0.00126
+        }
+      }
+    }, function(e) {
+      var atlanta, i, _results;
+      if (e.success) {
+        i = 0;
+        _results = [];
+        while (i < e.places.length) {
+          atlanta = Titanium.Map.createAnnotation({
+            latitude: e.places[i].latitude,
+            longitude: e.places[i].longitude,
+            title: e.places[i].name,
+            subtitle: "",
+            pincolor: Titanium.Map.ANNOTATION_PURPLE,
+            animate: false,
+            leftButton: "images/atlanta.jpg",
+            rightButton: Titanium.UI.iPhone.SystemButton.DISCLOSURE
+          });
+          mapView.addAnnotation(atlanta);
+          _results.push(i++);
+        }
+        return _results;
+      } else {
+        return Ti.API.info("no data");
+      }
+    });
+  });
+  mapWindow.add(mapView);
   webViewHeader = webview.retreiveWebViewHeader();
   webViewContents = webview.retreiveWebView();
   webWindow.add(webViewHeader);
@@ -59,13 +100,15 @@ if (testsEnabled === false) {
   });
   tab1 = Ti.UI.createTab({
     window: mainWindow,
-    title: '最新ニュース'
+    title: '最新ニュース',
+    icon: "ui/image/light_doc@2x.png"
   });
   mainWindow.hideNavBar();
   mapWindow.hideNavBar();
   tab2 = Ti.UI.createTab({
     window: mapWindow,
-    title: '探す'
+    title: '探す',
+    icon: "ui/image/light_locate@2x.png"
   });
   tabGroup.addTab(tab1);
   tabGroup.addTab(tab2);
