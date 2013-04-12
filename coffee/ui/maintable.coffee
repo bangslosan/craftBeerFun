@@ -72,8 +72,7 @@ class mainTable
       # webview.contentsUpdate(e.rowData.data.encoded)
       webview.contentsUpdate(e.rowData.data.content)      
       webview.headerUpdate(e.rowData.data)
-      navController.open webWindow  
-
+      tabGroup.activeTab.open(webWindow)
 
     )
     

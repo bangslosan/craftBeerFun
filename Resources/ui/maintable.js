@@ -71,7 +71,7 @@ mainTable = (function() {
     this.table.addEventListener('click', function(e) {
       webview.contentsUpdate(e.rowData.data.content);
       webview.headerUpdate(e.rowData.data);
-      return navController.open(webWindow);
+      return tabGroup.activeTab.open(webWindow);
     });
   }
 

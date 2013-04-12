@@ -51,9 +51,6 @@ else
     title: "お店の情報"
     barColor:"#DD9F00"
     backgroundColor: "#343434"
-  # MapView = require("ui/mapView")
-  # mapView = new MapView()
-  # マーカーはAnnotationオブジェクトとして表現される。
 
   mapView = Titanium.Map.createView
     mapType: Titanium.Map.STANDARD_TYPE
@@ -82,7 +79,7 @@ else
         i = 0
         while i < e.places.length
             
-          atlanta = Titanium.Map.createAnnotation(
+          annotation = Titanium.Map.createAnnotation(
             latitude: e.places[i].latitude
             longitude: e.places[i].longitude
             title: e.places[i].name
@@ -92,7 +89,7 @@ else
             leftButton: "images/atlanta.jpg"
             rightButton: Titanium.UI.iPhone.SystemButton.DISCLOSURE
           )
-          mapView.addAnnotation atlanta
+          mapView.addAnnotation annotation
           
           i++          
           
@@ -119,6 +116,7 @@ else
     icon:"ui/image/light_doc@2x.png"
     
   mainWindow.hideNavBar()
+  webWindow.showNavBar()
   mapWindow.hideNavBar()
   
   tab2 = Ti.UI.createTab

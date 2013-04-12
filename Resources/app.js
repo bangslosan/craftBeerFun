@@ -76,12 +76,12 @@ if (testsEnabled === false) {
         }
       }
     }, function(e) {
-      var atlanta, i, _results;
+      var annotation, i, _results;
       if (e.success) {
         i = 0;
         _results = [];
         while (i < e.places.length) {
-          atlanta = Titanium.Map.createAnnotation({
+          annotation = Titanium.Map.createAnnotation({
             latitude: e.places[i].latitude,
             longitude: e.places[i].longitude,
             title: e.places[i].name,
@@ -91,7 +91,7 @@ if (testsEnabled === false) {
             leftButton: "images/atlanta.jpg",
             rightButton: Titanium.UI.iPhone.SystemButton.DISCLOSURE
           });
-          mapView.addAnnotation(atlanta);
+          mapView.addAnnotation(annotation);
           _results.push(i++);
         }
         return _results;
@@ -114,6 +114,7 @@ if (testsEnabled === false) {
     icon: "ui/image/light_doc@2x.png"
   });
   mainWindow.hideNavBar();
+  webWindow.showNavBar();
   mapWindow.hideNavBar();
   tab2 = Ti.UI.createTab({
     window: mapWindow,
