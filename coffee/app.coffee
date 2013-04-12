@@ -2,6 +2,13 @@
 moment = require('lib/moment.min')
 momentja = require('lib/momentja')
 Cloud = require('ti.cloud')
+ticustomtab = require('de.marcelpociot.ticustomtab')
+ticustomtab.customText
+  textColor:      '#dddddd'
+  font:
+    fontSize:   14
+    fontWeight: 'bold'
+
 testsEnabled = true
 
 if testsEnabled is false

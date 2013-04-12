@@ -1,10 +1,20 @@
-var Cloud, Coedo, CraftBeerTokyo, Facebook, MenuTable, SanktGallen, coedo, craftBeerTokyo, facebook, mainTable, mainWindow, maintable, mapView, mapWindow, menu, menuTable, moment, momentja, results, sanktGallen, tab1, tab2, tabGroup, tableView, testsEnabled, webView, webViewContents, webViewHeader, webWindow, webview;
+var Cloud, Coedo, CraftBeerTokyo, Facebook, MenuTable, SanktGallen, coedo, craftBeerTokyo, facebook, mainTable, mainWindow, maintable, mapView, mapWindow, menu, menuTable, moment, momentja, results, sanktGallen, tab1, tab2, tabGroup, tableView, testsEnabled, ticustomtab, webView, webViewContents, webViewHeader, webWindow, webview;
 
 moment = require('lib/moment.min');
 
 momentja = require('lib/momentja');
 
 Cloud = require('ti.cloud');
+
+ticustomtab = require('de.marcelpociot.ticustomtab');
+
+ticustomtab.customText({
+  textColor: '#dddddd',
+  font: {
+    fontSize: 14,
+    fontWeight: 'bold'
+  }
+});
 
 testsEnabled = true;
 
