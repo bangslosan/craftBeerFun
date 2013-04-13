@@ -72,8 +72,7 @@ class mainTable
       # webview.contentsUpdate(e.rowData.data.encoded)
       webview.contentsUpdate(e.rowData.data.content)      
       webview.headerUpdate(e.rowData.data)
-      navController.open webWindow  
-
+      tabGroup.activeTab.open(webWindow)
 
     )
     
@@ -135,8 +134,6 @@ class mainTable
       height:15
       text:pubDate
 
-    row.add(updateTime)
-
     imagePath = @_retrevieImagePath(entry.content)
     
     
@@ -162,8 +159,8 @@ class mainTable
       left:5
 
     pictImageContainer = Ti.UI.createImageView
-      width:210
-      height:210
+      width:200
+      height:200
       left:5
       top:5
       backgroundGradient:

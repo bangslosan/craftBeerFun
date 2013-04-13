@@ -1,10 +1,20 @@
-var Cloud, Coedo, CraftBeerTokyo, Facebook, MenuTable, SanktGallen, coedo, craftBeerTokyo, facebook, mainTable, mainWindow, maintable, mapView, mapWindow, menu, menuTable, moment, momentja, results, sanktGallen, tab1, tab2, tabGroup, tableView, testsEnabled, webView, webViewContents, webViewHeader, webWindow, webview;
+var Cloud, Coedo, CraftBeerTokyo, Facebook, MenuTable, SanktGallen, coedo, craftBeerTokyo, facebook, mainTable, mainWindow, maintable, mapView, mapWindow, menu, menuTable, moment, momentja, results, sanktGallen, tab1, tab2, tabGroup, tableView, testsEnabled, ticustomtab, webView, webViewContents, webViewHeader, webWindow, webview;
 
 moment = require('lib/moment.min');
 
 momentja = require('lib/momentja');
 
 Cloud = require('ti.cloud');
+
+ticustomtab = require('de.marcelpociot.ticustomtab');
+
+ticustomtab.customText({
+  textColor: '#dddddd',
+  font: {
+    fontSize: 14,
+    fontWeight: 'bold'
+  }
+});
 
 testsEnabled = true;
 
@@ -66,12 +76,12 @@ if (testsEnabled === false) {
         }
       }
     }, function(e) {
-      var atlanta, i, _results;
+      var annotation, i, _results;
       if (e.success) {
         i = 0;
         _results = [];
         while (i < e.places.length) {
-          atlanta = Titanium.Map.createAnnotation({
+          annotation = Titanium.Map.createAnnotation({
             latitude: e.places[i].latitude,
             longitude: e.places[i].longitude,
             title: e.places[i].name,
@@ -81,7 +91,7 @@ if (testsEnabled === false) {
             leftButton: "images/atlanta.jpg",
             rightButton: Titanium.UI.iPhone.SystemButton.DISCLOSURE
           });
-          mapView.addAnnotation(atlanta);
+          mapView.addAnnotation(annotation);
           _results.push(i++);
         }
         return _results;
@@ -104,6 +114,7 @@ if (testsEnabled === false) {
     icon: "ui/image/light_doc@2x.png"
   });
   mainWindow.hideNavBar();
+  webWindow.showNavBar();
   mapWindow.hideNavBar();
   tab2 = Ti.UI.createTab({
     window: mapWindow,

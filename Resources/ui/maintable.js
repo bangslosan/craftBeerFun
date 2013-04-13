@@ -71,7 +71,7 @@ mainTable = (function() {
     this.table.addEventListener('click', function(e) {
       webview.contentsUpdate(e.rowData.data.content);
       webview.headerUpdate(e.rowData.data);
-      return navController.open(webWindow);
+      return tabGroup.activeTab.open(webWindow);
     });
   }
 
@@ -138,7 +138,6 @@ mainTable = (function() {
       height: 15,
       text: pubDate
     });
-    row.add(updateTime);
     imagePath = this._retrevieImagePath(entry.content);
     pictImage = Ti.UI.createImageView({
       image: imagePath,
@@ -160,8 +159,8 @@ mainTable = (function() {
       left: 5
     });
     pictImageContainer = Ti.UI.createImageView({
-      width: 210,
-      height: 210,
+      width: 200,
+      height: 200,
       left: 5,
       top: 5,
       backgroundGradient: {
