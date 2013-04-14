@@ -6,8 +6,8 @@ mainTable = (function() {
     var pullToRefresh,
       _this = this;
     this.table = Ti.UI.createTableView({
-      backgroundColor: '#ededed',
-      separatorColor: '#ccc',
+      backgroundColor: '#fff3c8',
+      separatorStyle: "NONE",
       zIndex: 2,
       width: 320,
       left: 0,
@@ -97,103 +97,51 @@ mainTable = (function() {
   };
 
   mainTable.prototype.createRow = function(entry) {
-    var blob, bodySummary, breakLine, container, imagePath, imageView, imagedContainer, mainImage, messageBoxContainer, pictImage, pictImageContainer, pubDate, row, textLabel, triangleImage, updateTime;
+    var bodySummary, breakLine, container, imagePath, messageBoxContainer, pictImage, pointer, pubDate, row, titleLabel, triangleImage, updateTime, verticalLine;
     row = Ti.UI.createTableViewRow({
-      backgroundGradient: {
-        type: 'linear',
-        startPoint: {
-          x: '0%',
-          y: '0%'
-        },
-        endPoint: {
-          x: '0%',
-          y: '100%'
-        },
-        colors: [
-          {
-            color: '#eeeeee',
-            position: 0.0
-          }, {
-            color: '#dddddd',
-            position: 0.7
-          }, {
-            color: '#dcdcdc',
-            position: 1.0
-          }
-        ]
-      },
       width: 320,
-      height: 350
+      borderWidth: 0,
+      selectedBackgroundColor: "#ffcc66",
+      backgroundImage: "ui/image/bg.jpg",
+      borderColor: '#fff3a8',
+      height: 200
     });
+    imagePath = this._retrevieImagePath(entry.content);
+    pictImage = Ti.UI.createImageView({
+      image: imagePath,
+      width: 320,
+      height: 480,
+      left: 0,
+      top: 0
+    });
+    container = Ti.UI.createView({
+      width: 300,
+      height: 120,
+      left: 0,
+      top: 60,
+      zIndex: 5,
+      borderWidth: 0
+    });
+    container.add(pictImage);
     pubDate = moment(entry.publishedDate).fromNow();
     updateTime = Ti.UI.createLabel({
       font: {
         fontSize: 10
       },
       color: '#666',
-      right: 5,
-      top: 230,
-      width: 100,
-      textAlign: 2,
-      height: 15,
-      text: pubDate
-    });
-    imagePath = this._retrevieImagePath(entry.content);
-    pictImage = Ti.UI.createImageView({
-      image: imagePath,
-      width: 320,
-      height: 420,
-      left: 0,
-      top: 0
-    });
-    blob = pictImage.toBlob();
-    blob.imageAsCropped({
-      height: 200,
-      width: 200,
-      x: -100,
-      y: -100
-    });
-    imageView = Titanium.UI.createImageView({
-      image: blob,
-      top: 2,
-      left: 5
-    });
-    pictImageContainer = Ti.UI.createImageView({
-      width: 200,
-      height: 200,
       left: 5,
-      top: 5,
-      backgroundGradient: {
-        type: 'linear',
-        startPoint: {
-          x: '0%',
-          y: '0%'
-        },
-        endPoint: {
-          x: '0%',
-          y: '100%'
-        },
-        colors: [
-          {
-            color: '#fff',
-            position: 0.0
-          }, {
-            color: '#fefefe',
-            position: 0.7
-          }, {
-            color: '#eee',
-            position: 1.0
-          }
-        ]
-      }
+      top: 10,
+      width: 100,
+      height: 15,
+      text: pubDate,
+      zIndex: 10
     });
-    pictImageContainer.add(imageView);
-    textLabel = Ti.UI.createLabel({
-      width: 200,
+    titleLabel = Ti.UI.createLabel({
+      width: 250,
       height: 20,
-      top: 210,
-      left: 20,
-      color: '#DD9F00',
+      top: 5,
+      left: 5,
+      color: '#224422',
       font: {
         fontSize: 14,
         fontWeight: 'bold'
@@ -202,9 +150,9 @@ mainTable = (function() {
     });
     bodySummary = Ti.UI.createLabel({
       width: 220,
-      height: 60,
+      height: 40,
       left: 25,
-      top: 10,
+      top: 20,
       color: "#444",
       borderRadius: 3,
       font: {
@@ -212,42 +160,11 @@ mainTable = (function() {
       },
       text: entry.content.replace(/<\/?[^>]+>/gi, "")
     });
-    container = Ti.UI.createView({
-      width: 220,
-      height: 250,
-      left: 50,
-      top: 5,
-      borderWidth: 1,
-      borderColor: "#ccc",
-      backgroundGradient: {
-        type: 'linear',
-        startPoint: {
-          x: '0%',
-          y: '0%'
-        },
-        endPoint: {
-          x: '0%',
-          y: '100%'
-        },
-        colors: [
-          {
-            color: '#fff',
-            position: 0.0
-          }, {
-            color: '#fefefe',
-            position: 0.8
-          }, {
-            color: '#eee',
-            position: 1.0
-          }
-        ]
-      }
-    });
     triangleImage = Ti.UI.createImageView({
       width: 15,
       height: 15,
-      left: 60,
-      top: 260,
+      left: 40,
+      top: 30,
       borderRadius: 3,
       transform: Ti.UI.create2DMatrix().rotate(45),
       borderColor: "#bbb",
@@ -256,18 +173,18 @@ mainTable = (function() {
       backgroundColor: "#fff"
     });
     breakLine = Ti.UI.createImageView({
-      width: 15,
-      height: 1,
-      left: 60,
-      top: 265,
+      width: 1,
+      height: 15,
+      left: 45,
+      top: 30,
       zIndex: 10,
       backgroundColor: "#fff"
     });
     messageBoxContainer = Ti.UI.createView({
       width: 270,
-      height: 80,
-      left: 25,
-      top: 265,
+      height: 180,
+      left: 45,
+      top: 5,
       zIndex: 5,
       borderColor: "#bbb",
       borderWidth: 1,
@@ -296,23 +213,34 @@ mainTable = (function() {
         ]
       }
     });
-    pictImageContainer.add(imageView);
-    container.add(pictImageContainer);
-    container.add(textLabel);
-    container.add(updateTime);
+    messageBoxContainer.add(titleLabel);
     messageBoxContainer.add(bodySummary);
-    mainImage = container.toImage();
-    imagedContainer = Ti.UI.createImageView({
-      image: mainImage,
-      width: 220,
-      height: 250,
-      left: 50,
-      top: 5
-    });
-    row.add(imagedContainer);
+    messageBoxContainer.add(container);
+    row.add(updateTime);
+    row.add(messageBoxContainer);
     row.add(triangleImage);
     row.add(breakLine);
-    row.add(messageBoxContainer);
+    verticalLine = Ti.UI.createImageView({
+      width: 1,
+      height: 240,
+      left: 30,
+      top: 0,
+      zIndex: 1,
+      backgroundColor: "#ffdf88"
+    });
+    pointer = Ti.UI.createImageView({
+      width: 15,
+      height: 15,
+      left: 22,
+      top: 33,
+      zIndex: 2,
+      borderWidth: 2,
+      borderColor: "#ffcc66",
+      backgroundColor: "#fff",
+      borderRadius: 10
+    });
+    row.add(verticalLine);
+    row.add(pointer);
     row.data = entry;
     row.className = 'entry';
     return row;

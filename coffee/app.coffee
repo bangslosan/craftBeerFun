@@ -17,6 +17,12 @@ else
   Facebook = require('model/facebook')
   facebook = new Facebook()
   
+  ColorConverter = require("ui/colorConverter")
+  colorConverter = new ColorConverter()
+
+  Ti.API.info colorConverter.paleAleColor()
+  
+  
   maintable = require("ui/maintable")
   tableView = new maintable()
   mainTable = tableView.getTable()
@@ -109,20 +115,24 @@ else
 
   tabGroup = Ti.UI.createTabGroup
     tabsBackgroundColor:"#DD9F00"
+    tabsBackgroundFocusedColor:"#DD9F00"
+    tabsBackgroundSelectedColor:"DD9933"
     
   tab1 = Ti.UI.createTab
     window:mainWindow
     title:'最新ニュース'
-    icon:"ui/image/light_doc@2x.png"
+    icon:"ui/image/radio-tower.png"
+
     
-  mainWindow.hideNavBar()
+  # mainWindow.hideNavBar()
   webWindow.showNavBar()
   mapWindow.hideNavBar()
   
   tab2 = Ti.UI.createTab
     window:mapWindow
     title:'探す'
-    icon:"ui/image/light_locate@2x.png"
+    icon:"ui/image/marker.png"
+
     
   tabGroup.addTab tab1
   tabGroup.addTab tab2
