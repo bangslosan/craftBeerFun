@@ -97,101 +97,55 @@ class mainTable
     return @table.data[0].rows.length-2
   createRow: (entry) ->
     row = Ti.UI.createTableViewRow
-      # backgroundGradient:
-      #   type: 'linear'
-      #   startPoint:
-      #     x:'0%'
-      #     y:'0%'
-      #   endPoint:
-      #     x:'0%'
-      #     y:'100%'
-      #   colors: [
-      #     color: '#fff3c8'
-      #     position: 0.0
-      #   ,      
-      #     color: '#fff3b8'
-      #     position: 0.7
-      #   ,      
-      #     color: '#fff3a8'
-      #     position: 1.0
-      #   ]
       width:320
       borderWidth:0
       # color:'#fff3c8'
       backgroundImage:"ui/image/bg.jpg"
       borderColor:'#fff3a8'
-      height:350
+      height:240
       
 
-    pubDate = moment(entry.publishedDate).fromNow()
-    updateTime = Ti.UI.createLabel
-      font:
-        fontSize:10
-      color:'#666'
-      right:5
-      top:230
-      width:100
-      textAlign:2
-      height:15
-      text:pubDate
-
     imagePath = @_retrevieImagePath(entry.content)
-    
     
     pictImage = Ti.UI.createImageView
       image:imagePath
       # image: "http://craftbeer-tokyo.info/wp/wp-content/uploads/2013/03/IMG_4208_2.jpg"
       width:320
-      height:420
+      height:480
       left:0
       top:0
+      
 
-    blob = pictImage.toBlob()
-    blob.imageAsCropped
-      height:200
-      width:200
-      x:-100
-      y:-100
+    container = Ti.UI.createView
+      width:320
+      height:120
+      left:0
+      top:100
+      zIndex:5
+      borderWidth:0
 
-
-    imageView = Titanium.UI.createImageView
-      image:blob
-      top:2
+      
+    container.add pictImage
+    row.add container
+    
+      
+    pubDate = moment(entry.publishedDate).fromNow()
+    updateTime = Ti.UI.createLabel
+      font:
+        fontSize:10
+      color:'#666'
       left:5
-
-    pictImageContainer = Ti.UI.createImageView
-      width:200
-      height:200
-      left:5
-      top:5
-      backgroundGradient:
-        type: 'linear'
-        startPoint:
-          x:'0%'
-          y:'0%'
-        endPoint:
-          x:'0%'
-          y:'100%'
-        colors: [
-          color: '#fff'
-          position: 0.0
-        ,      
-          color: '#fefefe'
-          position: 0.7
-        ,      
-          color: '#eee'
-          position: 1.0
-        ]
-
-    pictImageContainer.add imageView
-
-
-
-    textLabel = Ti.UI.createLabel
-      width:200
+      top:10
+      width:100
+      height:15
+      text:pubDate
+      zIndex:10
+      
+    titleLabel = Ti.UI.createLabel
+      width:250
       height:20
-      top:210
-      left:20
+      top:5
+      left:5
       # color:'#DD9F00'
       color:'#224422'
       font:
@@ -199,48 +153,24 @@ class mainTable
         fontWeight:'bold'
       text:entry.title
 
+
       
     bodySummary = Ti.UI.createLabel
       width:220
-      height:60
+      height:40
       left:25
-      top:10
+      top:20
       color:"#444"
       borderRadius:3
       font:
         fontSize:12
       text:entry.content.replace(/<\/?[^>]+>/gi, "")
-
-    container = Ti.UI.createView
-      width:220
-      height:250
-      left:50
-      top:5
-      borderWidth:1
-      borderColor:"#ccc"
-      backgroundGradient:
-        type: 'linear'
-        startPoint:
-          x:'0%'
-          y:'0%'
-        endPoint:
-          x:'0%'
-          y:'100%'
-        colors: [
-          color: '#fff'
-          position: 0.0
-        ,      
-          color: '#fefefe'
-          position: 0.8
-        ,      
-          color: '#eee'
-          position: 1.0
-        ]
+      
     triangleImage = Ti.UI.createImageView
       width:15
       height:15
-      left:60
-      top:260
+      left:40
+      top:30
       borderRadius:3
       transform : Ti.UI.create2DMatrix().rotate(45)
       borderColor:"#bbb"
@@ -249,18 +179,18 @@ class mainTable
       backgroundColor:"#fff"
       
     breakLine = Ti.UI.createImageView
-      width:15
-      height:1
-      left:60
-      top:265
+      width:1
+      height:15
+      left:45
+      top:30
       zIndex:10
       backgroundColor:"#fff"
       
     messageBoxContainer = Ti.UI.createView
       width:270
       height:80
-      left:25
-      top:265
+      left:45
+      top:5
       zIndex:5            
       borderColor:"#bbb"
       borderWidth:1
@@ -285,36 +215,35 @@ class mainTable
         ]
       
       
-    pictImageContainer.add imageView
-    container.add pictImageContainer
-    container.add textLabel
-    container.add updateTime
-    
+
+    messageBoxContainer.add titleLabel
     messageBoxContainer.add bodySummary
-    mainImage = container.toImage()
-    imagedContainer = Ti.UI.createImageView
-      image:mainImage
-      width:220
-      height:250
-      left:50
-      top:5
+    row.add updateTime
+    row.add messageBoxContainer
+    row.add triangleImage
+    row.add breakLine
+
       
     verticalLine = Ti.UI.createImageView
       width:1
-      height:350
+      height:240
       left:30
       top:0
       zIndex:1
       backgroundColor:"#ffdf88"
       
+    pointer = Ti.UI.createImageView
+      width:15
+      height:15
+      left:22
+      top:35
+      zIndex:2
+      backgroundColor:"#ffdd66"
+      borderRadius:10
 
-
-    row.add imagedContainer
-    row.add triangleImage
-    row.add breakLine
     row.add verticalLine
+    row.add pointer
     
-    row.add messageBoxContainer
     
     row.data = entry
     row.className = 'entry'
