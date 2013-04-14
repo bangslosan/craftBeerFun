@@ -97,7 +97,7 @@ mainTable = (function() {
   };
 
   mainTable.prototype.createRow = function(entry) {
-    var bodySummary, breakLine, container, imagePath, messageBoxContainer, pictImage, pointer, pubDate, row, titleLabel, triangleImage, updateTime, verticalLine;
+    var breakLine, container, iconImage, imagePath, pointer, pubDate, row, triangleImage, updateTime, verticalLine;
     row = Ti.UI.createTableViewRow({
       width: 320,
       borderWidth: 0,
@@ -107,63 +107,33 @@ mainTable = (function() {
       height: 200
     });
     imagePath = this._retrevieImagePath(entry.content);
-    pictImage = Ti.UI.createImageView({
-      image: imagePath,
-      width: 320,
-      height: 480,
-      left: 0,
-      top: 0
-    });
-    container = Ti.UI.createView({
-      width: 300,
-      height: 120,
-      left: 0,
-      top: 60,
-      zIndex: 5,
-      borderWidth: 0
-    });
-    container.add(pictImage);
-    pubDate = moment(entry.publishedDate).fromNow();
-    updateTime = Ti.UI.createLabel({
-      font: {
-        fontSize: 10
-      },
-      color: '#666',
-      left: 5,
-      top: 10,
-      width: 100,
-      height: 15,
-      text: pubDate,
-      zIndex: 10
-    });
-    titleLabel = Ti.UI.createLabel({
-      width: 250,
-      height: 20,
-      top: 5,
-      left: 5,
-      color: '#224422',
-      font: {
-        fontSize: 14,
-        fontWeight: 'bold'
-      },
-      text: entry.title
-    });
-    bodySummary = Ti.UI.createLabel({
-      width: 220,
-      height: 40,
-      left: 25,
-      top: 20,
-      color: "#444",
-      borderRadius: 3,
-      font: {
-        fontSize: 12
-      },
-      text: entry.content.replace(/<\/?[^>]+>/gi, "")
-    });
+    if (imagePath === "ui/image/site-logo-80.png") {
+      row.height = 80;
+      container = this._createContainerForTopics(entry.title, entry.content);
+      verticalLine = Ti.UI.createImageView({
+        width: 1,
+        height: 80,
+        left: 45,
+        top: 0,
+        zIndex: 1,
+        backgroundColor: "#ffdf88"
+      });
+    } else {
+      container = this._createContainerForTopicsWithPicture(imagePath, entry.title, entry.content);
+      verticalLine = Ti.UI.createImageView({
+        width: 1,
+        height: 200,
+        left: 45,
+        top: 0,
+        zIndex: 1,
+        backgroundColor: "#ffdf88"
+      });
+    }
+    row.add(container);
     triangleImage = Ti.UI.createImageView({
       width: 15,
       height: 15,
-      left: 40,
+      left: 55,
       top: 30,
       borderRadius: 3,
       transform: Ti.UI.create2DMatrix().rotate(45),
@@ -175,64 +145,32 @@ mainTable = (function() {
     breakLine = Ti.UI.createImageView({
       width: 1,
       height: 15,
-      left: 45,
+      left: 60,
       top: 30,
       zIndex: 10,
       backgroundColor: "#fff"
     });
-    messageBoxContainer = Ti.UI.createView({
-      width: 270,
-      height: 180,
-      left: 45,
-      top: 5,
-      zIndex: 5,
-      borderColor: "#bbb",
-      borderWidth: 1,
-      borderRadius: 5,
-      backgroundGradient: {
-        type: 'linear',
-        startPoint: {
-          x: '0%',
-          y: '0%'
-        },
-        endPoint: {
-          x: '0%',
-          y: '100%'
-        },
-        colors: [
-          {
-            color: '#fff',
-            position: 0.0
-          }, {
-            color: '#fefefe',
-            position: 0.3
-          }, {
-            color: '#eee',
-            position: 1.0
-          }
-        ]
-      }
-    });
-    messageBoxContainer.add(titleLabel);
-    messageBoxContainer.add(bodySummary);
-    messageBoxContainer.add(container);
-    row.add(updateTime);
-    row.add(messageBoxContainer);
     row.add(triangleImage);
     row.add(breakLine);
-    verticalLine = Ti.UI.createImageView({
-      width: 1,
-      height: 240,
-      left: 30,
-      top: 0,
-      zIndex: 1,
-      backgroundColor: "#ffdf88"
+    pubDate = moment(entry.publishedDate).fromNow();
+    updateTime = Ti.UI.createLabel({
+      font: {
+        fontSize: 10
+      },
+      color: '#666',
+      left: 10,
+      top: 10,
+      width: 100,
+      height: 15,
+      text: pubDate,
+      zIndex: 10
     });
+    row.add(updateTime);
     pointer = Ti.UI.createImageView({
       width: 15,
       height: 15,
-      left: 22,
-      top: 33,
+      left: 37,
+      top: 30,
       zIndex: 2,
       borderWidth: 2,
       borderColor: "#ffcc66",
@@ -241,6 +179,14 @@ mainTable = (function() {
     });
     row.add(verticalLine);
     row.add(pointer);
+    iconImage = Ti.UI.createImageView({
+      width: 30,
+      height: 20,
+      left: 7,
+      top: 27,
+      image: "ui/image/craftbeertokyo-logo-20.png"
+    });
+    row.add(iconImage);
     row.data = entry;
     row.className = 'entry';
     return row;
@@ -274,6 +220,152 @@ mainTable = (function() {
     row.className = 'loadOldEntry';
     row.storedTo = storedTo;
     return row;
+  };
+
+  mainTable.prototype._createContainerForTopicsWithPicture = function(imagePath, title, content) {
+    var bodySummary, messageBoxContainer, pictContainer, pictImage, titleLabel;
+    Ti.API.info("picture container");
+    pictContainer = Ti.UI.createView({
+      width: 300,
+      height: 120,
+      left: 0,
+      top: 60,
+      zIndex: 5,
+      borderWidth: 0
+    });
+    pictImage = Ti.UI.createImageView({
+      image: imagePath,
+      width: 320,
+      height: 480,
+      left: 0,
+      top: 0
+    });
+    pictContainer.add(pictImage);
+    titleLabel = Ti.UI.createLabel({
+      width: 220,
+      height: 20,
+      top: 5,
+      left: 5,
+      color: '#224422',
+      font: {
+        fontSize: 14,
+        fontWeight: 'bold'
+      },
+      text: title
+    });
+    bodySummary = Ti.UI.createLabel({
+      width: 220,
+      height: 40,
+      left: 25,
+      top: 20,
+      color: "#444",
+      borderRadius: 3,
+      font: {
+        fontSize: 12
+      },
+      text: content.replace(/<\/?[^>]+>/gi, "")
+    });
+    messageBoxContainer = Ti.UI.createView({
+      width: 250,
+      height: 180,
+      left: 60,
+      top: 5,
+      zIndex: 5,
+      borderColor: "#bbb",
+      borderWidth: 1,
+      borderRadius: 5,
+      backgroundGradient: {
+        type: 'linear',
+        startPoint: {
+          x: '0%',
+          y: '0%'
+        },
+        endPoint: {
+          x: '0%',
+          y: '100%'
+        },
+        colors: [
+          {
+            color: '#fff',
+            position: 0.0
+          }, {
+            color: '#fefefe',
+            position: 0.3
+          }, {
+            color: '#eee',
+            position: 1.0
+          }
+        ]
+      }
+    });
+    messageBoxContainer.add(titleLabel);
+    messageBoxContainer.add(bodySummary);
+    messageBoxContainer.add(pictContainer);
+    return messageBoxContainer;
+  };
+
+  mainTable.prototype._createContainerForTopics = function(title, content) {
+    var bodySummary, messageBoxContainer, titleLabel;
+    titleLabel = Ti.UI.createLabel({
+      width: 220,
+      height: 20,
+      top: 5,
+      left: 5,
+      color: '#224422',
+      font: {
+        fontSize: 14,
+        fontWeight: 'bold'
+      },
+      text: title
+    });
+    bodySummary = Ti.UI.createLabel({
+      width: 220,
+      height: 40,
+      left: 25,
+      top: 20,
+      color: "#444",
+      borderRadius: 3,
+      font: {
+        fontSize: 12
+      },
+      text: content.replace(/<\/?[^>]+>/gi, "")
+    });
+    messageBoxContainer = Ti.UI.createView({
+      width: 250,
+      height: 60,
+      left: 60,
+      top: 5,
+      zIndex: 5,
+      borderColor: "#bbb",
+      borderWidth: 1,
+      borderRadius: 5,
+      backgroundGradient: {
+        type: 'linear',
+        startPoint: {
+          x: '0%',
+          y: '0%'
+        },
+        endPoint: {
+          x: '0%',
+          y: '100%'
+        },
+        colors: [
+          {
+            color: '#fff',
+            position: 0.0
+          }, {
+            color: '#fefefe',
+            position: 0.3
+          }, {
+            color: '#eee',
+            position: 1.0
+          }
+        ]
+      }
+    });
+    messageBoxContainer.add(titleLabel);
+    messageBoxContainer.add(bodySummary);
+    return messageBoxContainer;
   };
 
   mainTable.prototype._createPullToRefresh = function(parameters) {
