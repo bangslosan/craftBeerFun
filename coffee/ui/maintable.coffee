@@ -107,65 +107,72 @@ class mainTable
       
 
     imagePath = @_retrevieImagePath(entry.content)
+    if imagePath is "ui/image/site-logo-80.png"
+      row.height = 80
+      container = @_createContainerForTopics(entry.publishedDate,entry.title,entry.content)
+    else
+      container = @_createContainerForTopicsWithPicture(imagePath,entry.publishedDate,entry.title,entry.content)
+      
+    row.add container
+
+    # pictImage = Ti.UI.createImageView
+    #   image:imagePath
+    #   # image: "http://craftbeer-tokyo.info/wp/wp-content/uploads/2013/03/IMG_4208_2.jpg"
+    #   width:320
+    #   height:480
+    #   left:0
+    #   top:0
+      
+
+    # container = Ti.UI.createView
+    #   width:300
+    #   height:120
+    #   left:0
+    #   top:60
+    #   zIndex:5
+    #   borderWidth:0
+
+      
+    # container.add pictImage
+    # # row.add container
     
-    pictImage = Ti.UI.createImageView
-      image:imagePath
-      # image: "http://craftbeer-tokyo.info/wp/wp-content/uploads/2013/03/IMG_4208_2.jpg"
-      width:320
-      height:480
-      left:0
-      top:0
       
-
-    container = Ti.UI.createView
-      width:300
-      height:120
-      left:0
-      top:60
-      zIndex:5
-      borderWidth:0
-
+    # pubDate = moment(entry.publishedDate).fromNow()
+    # updateTime = Ti.UI.createLabel
+    #   font:
+    #     fontSize:10
+    #   color:'#666'
+    #   left:5
+    #   top:10
+    #   width:100
+    #   height:15
+    #   text:pubDate
+    #   zIndex:10
       
-    container.add pictImage
-    # row.add container
-    
-      
-    pubDate = moment(entry.publishedDate).fromNow()
-    updateTime = Ti.UI.createLabel
-      font:
-        fontSize:10
-      color:'#666'
-      left:5
-      top:10
-      width:100
-      height:15
-      text:pubDate
-      zIndex:10
-      
-    titleLabel = Ti.UI.createLabel
-      width:250
-      height:20
-      top:5
-      left:5
-      # color:'#DD9F00'
-      color:'#224422'
-      font:
-        fontSize:14
-        fontWeight:'bold'
-      text:entry.title
+    # titleLabel = Ti.UI.createLabel
+    #   width:250
+    #   height:20
+    #   top:5
+    #   left:5
+    #   # color:'#DD9F00'
+    #   color:'#224422'
+    #   font:
+    #     fontSize:14
+    #     fontWeight:'bold'
+    #   text:entry.title
 
 
       
-    bodySummary = Ti.UI.createLabel
-      width:220
-      height:40
-      left:25
-      top:20
-      color:"#444"
-      borderRadius:3
-      font:
-        fontSize:12
-      text:entry.content.replace(/<\/?[^>]+>/gi, "")
+    # bodySummary = Ti.UI.createLabel
+    #   width:220
+    #   height:40
+    #   left:25
+    #   top:20
+    #   color:"#444"
+    #   borderRadius:3
+    #   font:
+    #     fontSize:12
+    #   text:entry.content.replace(/<\/?[^>]+>/gi, "")
       
     triangleImage = Ti.UI.createImageView
       width:15
@@ -215,15 +222,15 @@ class mainTable
           position: 1.0
         ]
       
-      
-
-    messageBoxContainer.add titleLabel
-    messageBoxContainer.add bodySummary
-    messageBoxContainer.add container
-    row.add updateTime
-    row.add messageBoxContainer
     row.add triangleImage
     row.add breakLine
+      
+
+    # messageBoxContainer.add titleLabel
+    # messageBoxContainer.add bodySummary
+    # messageBoxContainer.add container
+    # row.add updateTime
+    # row.add messageBoxContainer
 
       
     verticalLine = Ti.UI.createImageView
@@ -279,6 +286,193 @@ class mainTable
     row.storedTo = storedTo
     return row
     
+  _createContainerForTopicsWithPicture:(imagePath,publishedDate,title,content)->
+    Ti.API.info "picture container"
+    pictContainer = Ti.UI.createView
+      width:300
+      height:120
+      left:0
+      top:60
+      zIndex:5
+      borderWidth:0
+    
+    pictImage = Ti.UI.createImageView
+      image:imagePath
+      width:320
+      height:480
+      left:0
+      top:0
+      
+    pictContainer.add pictImage
+    
+      
+    pubDate = moment(publishedDate).fromNow()
+    updateTime = Ti.UI.createLabel
+      font:
+        fontSize:10
+      color:'#666'
+      left:5
+      top:10
+      width:100
+      height:15
+      text:pubDate
+      zIndex:10
+      
+    titleLabel = Ti.UI.createLabel
+      width:250
+      height:20
+      top:5
+      left:5
+      # color:'#DD9F00'
+      color:'#224422'
+      font:
+        fontSize:14
+        fontWeight:'bold'
+      text:title
+
+      
+    bodySummary = Ti.UI.createLabel
+      width:220
+      height:40
+      left:25
+      top:20
+      color:"#444"
+      borderRadius:3
+      font:
+        fontSize:12
+      text:content.replace(/<\/?[^>]+>/gi, "")
+      
+    messageBoxContainer = Ti.UI.createView
+      width:270
+      height:180
+      left:45
+      top:5
+      zIndex:5            
+      borderColor:"#bbb"
+      borderWidth:1
+      borderRadius:5
+      backgroundGradient:
+        type: 'linear'
+        startPoint:
+          x:'0%'
+          y:'0%'
+        endPoint:
+          x:'0%'
+          y:'100%'
+        colors: [
+          color: '#fff'
+          position: 0.0
+        ,      
+          color: '#fefefe'
+          position: 0.3
+        ,      
+          color: '#eee'
+          position: 1.0
+        ]
+      
+
+    messageBoxContainer.add titleLabel
+    messageBoxContainer.add bodySummary
+    messageBoxContainer.add pictContainer
+    return messageBoxContainer    
+    # Viewを多用するとスクロール時のパフォーマンス悪くなるので
+    # イメージ化することで回避
+    # topicsImage = messageBoxContainer.toImage()
+    
+    # container = Ti.UI.createImageView
+    #   image:topicsImage
+    #   left:45
+    #   top:5
+    #   zIndex:5            
+   
+    
+    # return container
+    
+  _createContainerForTopics:(publishedDate,title,content)->
+    Ti.API.info "no picture container "
+    pubDate = moment(publishedDate).fromNow()
+    updateTime = Ti.UI.createLabel
+      font:
+        fontSize:10
+      color:'#666'
+      left:5
+      top:10
+      width:100
+      height:15
+      text:pubDate
+      zIndex:10
+      
+    titleLabel = Ti.UI.createLabel
+      width:250
+      height:20
+      top:5
+      left:5
+      # color:'#DD9F00'
+      color:'#224422'
+      font:
+        fontSize:14
+        fontWeight:'bold'
+      text:title
+
+      
+    bodySummary = Ti.UI.createLabel
+      width:220
+      height:40
+      left:25
+      top:20
+      color:"#444"
+      borderRadius:3
+      font:
+        fontSize:12
+      text:content.replace(/<\/?[^>]+>/gi, "")
+      
+    messageBoxContainer = Ti.UI.createView
+      width:270
+      height:60
+      left:45
+      top:5
+      zIndex:5            
+      borderColor:"#bbb"
+      borderWidth:1
+      borderRadius:5
+      backgroundGradient:
+        type: 'linear'
+        startPoint:
+          x:'0%'
+          y:'0%'
+        endPoint:
+          x:'0%'
+          y:'100%'
+        colors: [
+          color: '#fff'
+          position: 0.0
+        ,      
+          color: '#fefefe'
+          position: 0.3
+        ,      
+          color: '#eee'
+          position: 1.0
+        ]
+
+    messageBoxContainer.add titleLabel
+    messageBoxContainer.add bodySummary
+    return messageBoxContainer
+    
+    # Viewを多用するとスクロール時のパフォーマンス悪くなるので
+    # イメージ化することで回避
+    # topicsImage = messageBoxContainer.toImage()
+    
+    # container = Ti.UI.createImageView
+    #   image:topicsImage
+    #   width:270
+    #   height:60
+    #   left:45
+    #   top:5
+    #   zIndex:5            
+   
+    
+    # return container
+
   _createPullToRefresh: (parameters) ->
     loadingCallback = parameters.action
     
