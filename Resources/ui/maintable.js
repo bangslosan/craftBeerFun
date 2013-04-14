@@ -6,8 +6,8 @@ mainTable = (function() {
     var pullToRefresh,
       _this = this;
     this.table = Ti.UI.createTableView({
-      backgroundColor: '#ededed',
-      separatorColor: '#ccc',
+      backgroundColor: '#fff3c8',
+      separatorStyle: "NONE",
       zIndex: 2,
       width: 320,
       left: 0,
@@ -97,32 +97,12 @@ mainTable = (function() {
   };
 
   mainTable.prototype.createRow = function(entry) {
-    var blob, bodySummary, breakLine, container, imagePath, imageView, imagedContainer, mainImage, messageBoxContainer, pictImage, pictImageContainer, pubDate, row, textLabel, triangleImage, updateTime;
+    var blob, bodySummary, breakLine, container, imagePath, imageView, imagedContainer, mainImage, messageBoxContainer, pictImage, pictImageContainer, pubDate, row, textLabel, triangleImage, updateTime, verticalLine;
     row = Ti.UI.createTableViewRow({
-      backgroundGradient: {
-        type: 'linear',
-        startPoint: {
-          x: '0%',
-          y: '0%'
-        },
-        endPoint: {
-          x: '0%',
-          y: '100%'
-        },
-        colors: [
-          {
-            color: '#eeeeee',
-            position: 0.0
-          }, {
-            color: '#dddddd',
-            position: 0.7
-          }, {
-            color: '#dcdcdc',
-            position: 1.0
-          }
-        ]
-      },
       width: 320,
+      borderWidth: 0,
+      backgroundImage: "ui/image/bg.jpg",
+      borderColor: '#fff3a8',
       height: 350
     });
     pubDate = moment(entry.publishedDate).fromNow();
@@ -193,7 +173,7 @@ mainTable = (function() {
       height: 20,
       top: 210,
       left: 20,
-      color: '#DD9F00',
+      color: '#224422',
       font: {
         fontSize: 14,
         fontWeight: 'bold'
@@ -309,9 +289,18 @@ mainTable = (function() {
       left: 50,
       top: 5
     });
+    verticalLine = Ti.UI.createImageView({
+      width: 1,
+      height: 350,
+      left: 30,
+      top: 0,
+      zIndex: 1,
+      backgroundColor: "#ffdf88"
+    });
     row.add(imagedContainer);
     row.add(triangleImage);
     row.add(breakLine);
+    row.add(verticalLine);
     row.add(messageBoxContainer);
     row.data = entry;
     row.className = 'entry';

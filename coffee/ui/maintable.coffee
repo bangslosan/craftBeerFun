@@ -1,9 +1,9 @@
 class mainTable
   constructor: () ->
     @table = Ti.UI.createTableView
-      backgroundColor:'#ededed'
-      separatorColor: '#ccc'
-      # separatorStyle:"NONE"
+      backgroundColor:'#fff3c8'
+      # separatorColor: '#ccc'
+      separatorStyle:"NONE"
       zIndex:2
       width:320
       left:0
@@ -97,28 +97,29 @@ class mainTable
     return @table.data[0].rows.length-2
   createRow: (entry) ->
     row = Ti.UI.createTableViewRow
-      backgroundGradient:
-        type: 'linear'
-        startPoint:
-          x:'0%'
-          y:'0%'
-        endPoint:
-          x:'0%'
-          y:'100%'
-        colors: [
-          color: '#eeeeee'
-          position: 0.0
-        ,      
-          color: '#dddddd'
-          position: 0.7
-        ,      
-          color: '#dcdcdc'
-          position: 1.0
-        ]
+      # backgroundGradient:
+      #   type: 'linear'
+      #   startPoint:
+      #     x:'0%'
+      #     y:'0%'
+      #   endPoint:
+      #     x:'0%'
+      #     y:'100%'
+      #   colors: [
+      #     color: '#fff3c8'
+      #     position: 0.0
+      #   ,      
+      #     color: '#fff3b8'
+      #     position: 0.7
+      #   ,      
+      #     color: '#fff3a8'
+      #     position: 1.0
+      #   ]
       width:320
-      # borderWidth:2
-      # color:'#999'
-      # borderColor:'#ededed',
+      borderWidth:0
+      # color:'#fff3c8'
+      backgroundImage:"ui/image/bg.jpg"
+      borderColor:'#fff3a8'
       height:350
       
 
@@ -191,7 +192,8 @@ class mainTable
       height:20
       top:210
       left:20
-      color:'#DD9F00'
+      # color:'#DD9F00'
+      color:'#224422'
       font:
         fontSize:14
         fontWeight:'bold'
@@ -296,11 +298,22 @@ class mainTable
       height:250
       left:50
       top:5
+      
+    verticalLine = Ti.UI.createImageView
+      width:1
+      height:350
+      left:30
+      top:0
+      zIndex:1
+      backgroundColor:"#ffdf88"
+      
 
 
     row.add imagedContainer
     row.add triangleImage
     row.add breakLine
+    row.add verticalLine
+    
     row.add messageBoxContainer
     
     row.data = entry
