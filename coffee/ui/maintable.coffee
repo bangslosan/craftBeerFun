@@ -99,10 +99,11 @@ class mainTable
     row = Ti.UI.createTableViewRow
       width:320
       borderWidth:0
+      selectedBackgroundColor:"#ffcc66"
       # color:'#fff3c8'
       backgroundImage:"ui/image/bg.jpg"
       borderColor:'#fff3a8'
-      height:240
+      height:200
       
 
     imagePath = @_retrevieImagePath(entry.content)
@@ -117,16 +118,16 @@ class mainTable
       
 
     container = Ti.UI.createView
-      width:320
+      width:300
       height:120
       left:0
-      top:100
+      top:60
       zIndex:5
       borderWidth:0
 
       
     container.add pictImage
-    row.add container
+    # row.add container
     
       
     pubDate = moment(entry.publishedDate).fromNow()
@@ -188,7 +189,7 @@ class mainTable
       
     messageBoxContainer = Ti.UI.createView
       width:270
-      height:80
+      height:180
       left:45
       top:5
       zIndex:5            
@@ -218,6 +219,7 @@ class mainTable
 
     messageBoxContainer.add titleLabel
     messageBoxContainer.add bodySummary
+    messageBoxContainer.add container
     row.add updateTime
     row.add messageBoxContainer
     row.add triangleImage
@@ -236,9 +238,12 @@ class mainTable
       width:15
       height:15
       left:22
-      top:35
+      top:33
       zIndex:2
-      backgroundColor:"#ffdd66"
+      borderWidth:2
+      borderColor:"#ffcc66"
+
+      backgroundColor:"#fff"      
       borderRadius:10
 
     row.add verticalLine
