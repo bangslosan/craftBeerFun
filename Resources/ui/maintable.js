@@ -97,7 +97,7 @@ mainTable = (function() {
   };
 
   mainTable.prototype.createRow = function(entry) {
-    var breakLine, container, imagePath, messageBoxContainer, pointer, row, triangleImage, verticalLine;
+    var breakLine, container, iconImage, imagePath, pointer, pubDate, row, triangleImage, updateTime, verticalLine;
     row = Ti.UI.createTableViewRow({
       width: 320,
       borderWidth: 0,
@@ -109,15 +109,31 @@ mainTable = (function() {
     imagePath = this._retrevieImagePath(entry.content);
     if (imagePath === "ui/image/site-logo-80.png") {
       row.height = 80;
-      container = this._createContainerForTopics(entry.publishedDate, entry.title, entry.content);
+      container = this._createContainerForTopics(entry.title, entry.content);
+      verticalLine = Ti.UI.createImageView({
+        width: 1,
+        height: 80,
+        left: 45,
+        top: 0,
+        zIndex: 1,
+        backgroundColor: "#ffdf88"
+      });
     } else {
-      container = this._createContainerForTopicsWithPicture(imagePath, entry.publishedDate, entry.title, entry.content);
+      container = this._createContainerForTopicsWithPicture(imagePath, entry.title, entry.content);
+      verticalLine = Ti.UI.createImageView({
+        width: 1,
+        height: 200,
+        left: 45,
+        top: 0,
+        zIndex: 1,
+        backgroundColor: "#ffdf88"
+      });
     }
     row.add(container);
     triangleImage = Ti.UI.createImageView({
       width: 15,
       height: 15,
-      left: 40,
+      left: 55,
       top: 30,
       borderRadius: 3,
       transform: Ti.UI.create2DMatrix().rotate(45),
@@ -129,59 +145,32 @@ mainTable = (function() {
     breakLine = Ti.UI.createImageView({
       width: 1,
       height: 15,
-      left: 45,
+      left: 60,
       top: 30,
       zIndex: 10,
       backgroundColor: "#fff"
     });
-    messageBoxContainer = Ti.UI.createView({
-      width: 270,
-      height: 180,
-      left: 45,
-      top: 5,
-      zIndex: 5,
-      borderColor: "#bbb",
-      borderWidth: 1,
-      borderRadius: 5,
-      backgroundGradient: {
-        type: 'linear',
-        startPoint: {
-          x: '0%',
-          y: '0%'
-        },
-        endPoint: {
-          x: '0%',
-          y: '100%'
-        },
-        colors: [
-          {
-            color: '#fff',
-            position: 0.0
-          }, {
-            color: '#fefefe',
-            position: 0.3
-          }, {
-            color: '#eee',
-            position: 1.0
-          }
-        ]
-      }
-    });
     row.add(triangleImage);
     row.add(breakLine);
-    verticalLine = Ti.UI.createImageView({
-      width: 1,
-      height: 240,
-      left: 30,
-      top: 0,
-      zIndex: 1,
-      backgroundColor: "#ffdf88"
+    pubDate = moment(entry.publishedDate).fromNow();
+    updateTime = Ti.UI.createLabel({
+      font: {
+        fontSize: 10
+      },
+      color: '#666',
+      left: 10,
+      top: 10,
+      width: 100,
+      height: 15,
+      text: pubDate,
+      zIndex: 10
     });
+    row.add(updateTime);
     pointer = Ti.UI.createImageView({
       width: 15,
       height: 15,
-      left: 22,
-      top: 33,
+      left: 37,
+      top: 30,
       zIndex: 2,
       borderWidth: 2,
       borderColor: "#ffcc66",
@@ -190,6 +179,14 @@ mainTable = (function() {
     });
     row.add(verticalLine);
     row.add(pointer);
+    iconImage = Ti.UI.createImageView({
+      width: 30,
+      height: 20,
+      left: 7,
+      top: 27,
+      image: "ui/image/craftbeertokyo-logo-20.png"
+    });
+    row.add(iconImage);
     row.data = entry;
     row.className = 'entry';
     return row;
@@ -225,8 +222,8 @@ mainTable = (function() {
     return row;
   };
 
-  mainTable.prototype._createContainerForTopicsWithPicture = function(imagePath, publishedDate, title, content) {
-    var bodySummary, messageBoxContainer, pictContainer, pictImage, pubDate, titleLabel, updateTime;
+  mainTable.prototype._createContainerForTopicsWithPicture = function(imagePath, title, content) {
+    var bodySummary, messageBoxContainer, pictContainer, pictImage, titleLabel;
     Ti.API.info("picture container");
     pictContainer = Ti.UI.createView({
       width: 300,
@@ -244,21 +241,8 @@ mainTable = (function() {
       top: 0
     });
     pictContainer.add(pictImage);
-    pubDate = moment(publishedDate).fromNow();
-    updateTime = Ti.UI.createLabel({
-      font: {
-        fontSize: 10
-      },
-      color: '#666',
-      left: 5,
-      top: 10,
-      width: 100,
-      height: 15,
-      text: pubDate,
-      zIndex: 10
-    });
     titleLabel = Ti.UI.createLabel({
-      width: 250,
+      width: 220,
       height: 20,
       top: 5,
       left: 5,
@@ -282,9 +266,9 @@ mainTable = (function() {
       text: content.replace(/<\/?[^>]+>/gi, "")
     });
     messageBoxContainer = Ti.UI.createView({
-      width: 270,
+      width: 250,
       height: 180,
-      left: 45,
+      left: 60,
       top: 5,
       zIndex: 5,
       borderColor: "#bbb",
@@ -320,24 +304,10 @@ mainTable = (function() {
     return messageBoxContainer;
   };
 
-  mainTable.prototype._createContainerForTopics = function(publishedDate, title, content) {
-    var bodySummary, messageBoxContainer, pubDate, titleLabel, updateTime;
-    Ti.API.info("no picture container ");
-    pubDate = moment(publishedDate).fromNow();
-    updateTime = Ti.UI.createLabel({
-      font: {
-        fontSize: 10
-      },
-      color: '#666',
-      left: 5,
-      top: 10,
-      width: 100,
-      height: 15,
-      text: pubDate,
-      zIndex: 10
-    });
+  mainTable.prototype._createContainerForTopics = function(title, content) {
+    var bodySummary, messageBoxContainer, titleLabel;
     titleLabel = Ti.UI.createLabel({
-      width: 250,
+      width: 220,
       height: 20,
       top: 5,
       left: 5,
@@ -361,9 +331,9 @@ mainTable = (function() {
       text: content.replace(/<\/?[^>]+>/gi, "")
     });
     messageBoxContainer = Ti.UI.createView({
-      width: 270,
+      width: 250,
       height: 60,
-      left: 45,
+      left: 60,
       top: 5,
       zIndex: 5,
       borderColor: "#bbb",
